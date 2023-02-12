@@ -15,20 +15,28 @@ export class AdminService
    getDoctorByIdName(qry): any{
       return "Doctor id : "+qry.id+" and name : "+qry.name;
    }
-   regDoc(name, id): any{
-      return "Admin registered name : "+name+" and Id : "+id;
+   regDoc(mydto): any{
+      return mydto;
    }
    removeDoc(name): string{
       return "Removed doctor : "+name;
    }
-   updateDoc(name, id): any{
-      return "Update doctor info where id :"+id+" name: "+name;
+   updateDoc(myData, id): any{
+      return "Update doctor info where id :"+id+
+      " name: "+myData.name+
+      " age : "+myData.age+
+      " email : "+myData.email+
+      " contactNo : "+myData.contactNo;
+      ;
    }
    regStaff(mydto:AdminForm): any{
-      return "staff Inserted name: " + mydto.name+" and id is " + mydto.id;
+      return mydto;
    }
    updateStaff(name, id): any{
       return "Staff updated name: "+name+" and id: "+id;
+   }
+   removeStaffById(id): any{
+      return "Staff removed by Id : "+id;
    }
    getPatientByIdName(qry): any{
       return "Patient id : "+qry.id+" and name : "+qry.name;

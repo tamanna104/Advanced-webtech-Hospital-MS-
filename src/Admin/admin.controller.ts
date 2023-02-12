@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UsePipes } from "@nestjs/common";
 import { AdminService } from "./admin.services";
 import { AdminForm } from "./admin.dto";
+import { updateForm } from "./admin.dto";
+import { ValidationPipe } from "@nestjs/common/pipes";
 
 @Controller("/admin")
 export class AdminController
@@ -12,7 +14,7 @@ export class AdminController
     }
 
     @Get("/Id/:id")
-        getAdminById(@Param("id") id:number): number{
+        getAdminById(@Param("id", ParseIntPipe) id:number): number{
             return this.adminService.getAdminById(id);
             //return "get admin by id : "+param.id;
         }
@@ -29,10 +31,11 @@ export class AdminController
         //return "get doctor by ID : "+param.id;
     }
 
+    
     @Post("/regDoc")
-    regDoc(@Body("name") name:string,
-            @Body("id") id:number): any{
-        return this.adminService.regDoc(name, id);
+    @UsePipes(new ValidationPipe())
+    regDoc(@Body() mydto:AdminForm): any{
+        return this.adminService.regDoc(mydto);
                 //return "Register Doctor by Id :" +param.id + " and name " +param.name;
     }
 
@@ -43,24 +46,32 @@ export class AdminController
     }
 
     @Put("updateDoc/:id")
-    updateDoc(@Body("name") name:string,
-                @Param("id") id:number): any{
-        return this.adminService.updateDoc(name, id);
+    @UsePipes(new ValidationPipe())
+    updateDoc(@Body() myData:updateForm,
+                @Param("id", ParseIntPipe) id:number): any{
+        return this.adminService.updateDoc(myData, id);
                     //return "Update Doctor by Id : "+param.id
     }
 
     @Post("/regStaff")
+    @UsePipes(new ValidationPipe())
     regStaff(@Body() mydto:AdminForm): any{
         return this.adminService.regStaff(mydto);
         //return "Register Staff by Id :" +param.id + " and name " +param.name;
     }
 
-    @Put("updateStaff")
-    updateStaff(@Body("name") name:string,
-                @Body("id") id:number): any{
-        return this.adminService.updateStaff(name, id);
+    @Put("updateStaff/:id")
+    @UsePipes(new ValidationPipe())
+    updateStaff(@Body() myData:updateForm,
+                @Param("id", ParseIntPipe) id:number): any{
+        return this.adminService.updateDoc(myData, id);
                     //return "Update Staff by Id : "+param.id
     }
+
+    @Delete("/removeStaff/:id")
+    removeStaffById(@Param("id", ParseIntPipe) id:number): any{
+        return this.adminService.removeStaffById(id);
+    } 
 
     @Get("/Patient")
     getPatientByIdName(@Query() qry:any): any {
